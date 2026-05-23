@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公考通关·习惯养成舱</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 10px 0 0 0; opacity: 0.9; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--primary);
+            border-bottom: 2px solid #eff6ff;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 按钮与交互 */
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: var(--primary); }
+
+        /* 番茄钟样式 */
+        .timer-display {
+            font-size: 3rem;
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--danger);
+            font-family: monospace;
+        }
+
+        /* 习惯清单样式 */
+        .todo-list { list-style: none; padding: 0; }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .todo-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* 错题本简单样式 */
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            resize: none;
+        }
+
+        .note-list {
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>公考通关 · 习惯养成舱</h1>
+        <p>不积跬步，无以至千里。今日也是自律的公考人！</p>
+    </header>
+
+    <div class="grid">
+        <!-- 1. 学习规划与准备 -->
+        <div class="card">
+            <h2>📅 1. 规划与准备（每日打卡）</h2>
+            <p>清空书桌，准备好行测/申论资料，开启专注的一天。</p>
+            <ul class="todo-list">
+                <li class="todo-item"><input type="checkbox" id="p1"> <label for="p1">明确今日学习目标（如：行测30题+申论1篇）</label></li>
+                <li class="todo-item"><input type="checkbox" id="p2"> <label for="p2">开启免打扰，手机放远</label></li>
+            </ul>
+        </div>
+
+        <!-- 2. 番茄工作法 -->
+        <div class="card">
+            <h2>⏱️ 2. 学习时间：番茄工作法</h2>
+            <p>专注 25 分钟，休息 5 分钟。高效抗疲劳。</p>
+            <div class="timer-display" id="timer">25:00</div>
+            <button id="startBtn" onclick="toggleTimer()">开启专注时间</button>
+        </div>
+
+        <!-- 3. 主动回忆法 -->
+        <div class="card">
+            <h2>🧠 3. 背诵：主动回忆法</h2>
+            <p><strong>技巧：</strong>合上书本，闭眼在脑海中勾勒知识导图，或默写核心考点，坚决不盲目死记硬背！</p>
+            <button onclick="alert('💡 挑战一下：现在闭上眼，默想今天背的3个常识或申论金句！')">开始主动回忆检测</button>
+        </div>
+
+        <!-- 4. 费曼理解技巧 -->
+        <div class="card">
+            <h2>🗣️ 4. 攻坚：费曼理解技巧</h2>
+            <p><strong>技巧：</strong>遇到不会的错题或难懂的理论（如法律条文），试着用最通俗的话讲给小学生听。能讲懂，才是真懂。</p>
+            <button onclick="alert('🗣️ 假想你面前坐着一个小妹妹，试着用1句话解释什么是“行政复议”？')">模拟费曼教学</button>
+        </div>
+
+        <!-- 5. 限时训练法 -->
+        <div class="card">
+            <h2>⚡ 5. 刷题：限时训练法</h2>
+            <p>公考就是跟时间赛跑！平时刷题必须掐表。</p>
+            <ul class="todo-list">
+                <li class="todo-item"><input type="checkbox" id="t1"> <label for="t1">常识判断：严格控制在 30 秒/题</label></li>
+                <li class="todo-item"><input type="checkbox" id="t2"> <label for="t2">言语/判断/资料：平均 50-60 秒/题</label></li>
+            </ul>
+        </div>
+
+        <!-- 6. 错题整理法 -->
+        <div class="card">
+            <h2>📓 6. 复盘：错题分类整理</h2>
+            <p>不要只抄题目！写下：①为什么错（概念模糊/粗心/时间不够）②正确核心逻辑。</p>
+            <textarea id="wrongQuestion" placeholder="输入今天的核心错因或警示..."></textarea>
+            <button onclick="saveNote()">记录这笔学费</button>
+            <p></p>
+            <div class="note-list" id="notesContainer">暂无错题记录</div>
+        </div>
+    </div>
+
+    <!-- 7. 考试策略 -->
+    <div class="card" style="margin-bottom: 50px;">
+        <h2>🏆 7. 模拟考绝技：先易后难法</h2>
+        <p><strong>铁律：</strong>无论平时模考还是最终上战场，遇见卡住超过1分钟的题，**立刻坚决跳过**！把能拿的分稳稳拿到手，才是高分秘诀。</p>
+        <ul style="padding-left: 20px;">
+            <li>第一阶段：抢分期（秒杀常识，稳拿资料分析、类比、定义判断）</li>
+            <li>第二阶段：攻坚期（啃言语理解、逻辑判断、数量关系基本题）</li>
+            <li>第三阶段：放弃期（最后5分钟，涂好答题卡，果断放弃极难的数量题）</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // 番茄钟逻辑
+    let timeLeft = 25 * 60;
+    let timerId = null;
+    let isRunning = false;
+
+    function updateDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+        const btn = document.getElementById('startBtn');
+        if (isRunning) {
+            clearInterval(timerId);
+            btn.textContent = '开启专注时间';
+            btn.style.backgroundColor = '#3b82f6';
+        } else {
+            btn.textContent = '暂停';
+            btn.style.backgroundColor = '#e2e8f0';
+            btn.style.color = '#1e293b';
+            timerId = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timerId);
+                    alert('🎉 恭喜完成一个番茄钟！休息5分钟吧~');
+                    timeLeft = 25 * 60;
+                    updateDisplay();
+                    btn.textContent = '开启专注时间';
+                }
+            }, 1000);
+        }
+        isRunning = !isRunning;
+    }
+
+    // 错题简易记录
+    let notes = [];
+    function saveNote() {
+        const input = document.getElementById('wrongQuestion');
+        if(!input.value.trim()) return;
+        notes.push(input.value);
+        input.value = '';
+        
+        const container = document.getElementById('notesContainer');
+        container.innerHTML = notes.map((note, index) => `<div>📌 错题${index+1}：${note}</div>`).join('');
+    }
+</script>
+
+</body>
+</html>
